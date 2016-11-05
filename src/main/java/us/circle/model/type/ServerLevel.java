@@ -1,0 +1,11 @@
+package us.circle.model.type;
+
+public enum ServerLevel {
+	FedExGround,FedExGroundHomeDelivery,FedEx2Day,FedEx2DayAM,FedExExpressSaver,FedExFirstOvernight,FedExPriorityOvernight,
+	FedExStandardOvernight,FedExInternationalEconomy,FedExInternationalPriority,
+	UPSGround,UPSNextDayAir,UPS2ndDayAir,UPS3DaySelect,UPSNextDayAirSaver,UPSNextDayAirEarlyAM,
+	UPS2ndDayAirAM,UPSSurePostLessthan1lb,UPSSurePost1lborGreater,UPSWorldwideExpress,UPSWorldwideExpedited,
+	UPSWorldwideSaver,
+	USPSPriorityMail,USPSPriorityMailExpress,USPSFirstClassMail,USPSMediaMail,USPSPriorityMailInternational,
+	USPSPriorityMailExpressInternational,USPSFirstClassMailInternational
+}

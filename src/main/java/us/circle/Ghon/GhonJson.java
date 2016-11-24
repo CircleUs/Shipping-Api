@@ -87,27 +87,32 @@ public class GhonJson {
 		
 		while(n>=0){
 			char s = chars[n];
-			m = delimiterL(n, chars);
-			switch(s){
-				case LFKH :
-					GhonEleL ghonEleL2 = jsonToGhonEleL(Arrays.copyOfRange(chars, n + 1, m - 1), ghonConfig);
-					if(ghonEleL2 != null){
-						ghonEleL.getObjects().add(ghonEleL2);
-					}
-					break;
-				case LDKH :
-					GhonEleM ghonEleM = jsonToGhonEleM(Arrays.copyOfRange(chars, n + 1, m - 1), ghonConfig);
-					if(ghonEleM != null){
-						ghonEleL.getObjects().add(ghonEleM);
-					}
-					break;
-				default :
-					GhonEleD ghonEleD = jsonToGhonEleD(Arrays.copyOfRange(chars, n, m), ghonConfig);
-					if(ghonEleD != null){
-						ghonEleL.getObjects().add(ghonEleD);
-					}
+			if(s == LFKH || s == LDKH || s == SYH || s == 'n' || s=='N' 
+					|| s=='T' || s=='t' || s=='f' || s=='F' || ((byte)s >= 48 && (byte)s <= 57)){
+				m = delimiterL(n, chars);
+				switch(s){
+					case LFKH :
+						GhonEleL ghonEleL2 = jsonToGhonEleL(Arrays.copyOfRange(chars, n + 1, m - 1), ghonConfig);
+						if(ghonEleL2 != null){
+							ghonEleL.getObjects().add(ghonEleL2);
+						}
+						break;
+					case LDKH :
+						GhonEleM ghonEleM = jsonToGhonEleM(Arrays.copyOfRange(chars, n + 1, m - 1), ghonConfig);
+						if(ghonEleM != null){
+							ghonEleL.getObjects().add(ghonEleM);
+						}
+						break;
+					default :
+						GhonEleD ghonEleD = jsonToGhonEleD(Arrays.copyOfRange(chars, n, m), ghonConfig);
+						if(ghonEleD != null){
+							ghonEleL.getObjects().add(ghonEleD);
+						}
+				}
+				n = m + 1;
+			}else{
+				n++;
 			}
-			n = m + 1;
 			if(n > chars.length){
 				n = -1;
 			}
@@ -226,7 +231,7 @@ public class GhonJson {
 				ghonEleD.setValue(chars);
 				return ghonEleD;
 			case (char)GhonEleD.DATE :
-				ghonEleD = new GhonEleDate(ghonConfig.getTimeZone(), ghonConfig.getPattern(), ghonConfig.isTimeStamp());
+				ghonEleD = new GhonEleDate(ghonConfig.getTimeZone(), ghonConfig.getPattern(), ghonConfig.isTimeStamp(), ghonConfig.isIso8601());
 				ghonEleD.setValue(chars);
 				return ghonEleD;
 			case (char)GhonEleD.DOUBLE :

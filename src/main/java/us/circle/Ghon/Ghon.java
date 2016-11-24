@@ -33,6 +33,8 @@ public class Ghon {
 	
 	private boolean isTimeStamp = true;
 	
+	private boolean isIso8601 = true;
+	
 	private GhonConfig ghonConfig;
 	
 	public Ghon(){
@@ -45,33 +47,37 @@ public class Ghon {
 		setClasses(classes);
 	}
 	
-	public Ghon(boolean isAccessible, boolean isShowNull, TimeZone timeZone, String pattern, boolean isTimeStamp){
+	public Ghon(boolean isAccessible, boolean isShowNull, TimeZone timeZone, String pattern, boolean isTimeStamp, boolean isIso8601){
 		this.isAccessible = isAccessible;
 		this.isShowNull = isShowNull;
 		this.timeZone = timeZone;
 		this.pattern = pattern;
 		this.isTimeStamp = isTimeStamp;
+		this.isIso8601 = isIso8601;
 		ghonConfig = new GhonConfig();
 		ghonConfig.setAccessible(isAccessible);
 		ghonConfig.setPattern(pattern);
 		ghonConfig.setShowNull(isShowNull);
 		ghonConfig.setTimeZone(timeZone);
 		ghonConfig.setTimeStamp(isTimeStamp);
+		ghonConfig.setIso8601(isIso8601);
 		setClasses();
 	}
 	
-	public Ghon(boolean isAccessible, boolean isShowNull, TimeZone timeZone, String pattern, boolean isTimeStamp, Class<?>... classes){
+	public Ghon(boolean isAccessible, boolean isShowNull, TimeZone timeZone, String pattern, boolean isTimeStamp, boolean isIso8601, Class<?>... classes){
 		this.isAccessible = isAccessible;
 		this.isShowNull = isShowNull;
 		this.timeZone = timeZone;
 		this.pattern = pattern;
 		this.isTimeStamp = isTimeStamp;
+		this.isIso8601 = isIso8601;
 		ghonConfig = new GhonConfig();
 		ghonConfig.setAccessible(isAccessible);
 		ghonConfig.setPattern(pattern);
 		ghonConfig.setShowNull(isShowNull);
 		ghonConfig.setTimeZone(timeZone);
 		ghonConfig.setTimeStamp(isTimeStamp);
+		ghonConfig.setIso8601(isIso8601);
 		setClasses(classes);
 	}
 	
@@ -140,6 +146,24 @@ public class Ghon {
 		this.pattern = pattern;
 	}
 	
+	public boolean isTimeStamp() {
+		return isTimeStamp;
+	}
+
+	public void setTimeStamp(boolean isTimeStamp) {
+		getGhonConfig().setTimeStamp(isTimeStamp);
+		this.isTimeStamp = isTimeStamp;
+	}
+
+	public boolean isIso8601() {
+		return isIso8601;
+	}
+
+	public void setIso8601(boolean isIso8601) {
+		getGhonConfig().setIso8601(isIso8601);
+		this.isIso8601 = isIso8601;
+	}
+	
 	private GhonConfig getGhonConfig(){
 		if(ghonConfig == null){
 			ghonConfig = new GhonConfig();
@@ -148,6 +172,7 @@ public class Ghon {
 			ghonConfig.setShowNull(isShowNull);
 			ghonConfig.setTimeZone(timeZone);
 			ghonConfig.setTimeStamp(isTimeStamp);
+			ghonConfig.setIso8601(isIso8601);
 		}
 		return ghonConfig;
 	}
@@ -158,6 +183,14 @@ public class Ghon {
 	
 	public <T> T ghonEleToObject(GhonEle ghonEle, Class<T> clazz) throws GhonException{
 		return GhonConvert.ghonEleToObject(ghonEle, getGhonConfig(), clazz);
+	}
+	
+	public <T> List<T> ghonEleToList(GhonEle ghonEle, Class<T> clazz) throws GhonException{
+		return GhonConvert.ghonEleToList(ghonEle, getGhonConfig(), clazz);
+	}
+	
+	public <T> T[] ghonEleToArray(GhonEle ghonEle, Class<T> clazz) throws GhonException{
+		return GhonConvert.ghonEleToArray(ghonEle, getGhonConfig(), clazz);
 	}
 	
 	public GhonEle bytesToGhonEle(byte[] bytes) throws GhonException{

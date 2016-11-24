@@ -16,6 +16,8 @@ public class GhonConfig {
 	private List<Class<?>> classes; 
 	
 	private boolean isTimeStamp;
+	
+	private boolean isIso8601;
 
 	public boolean isTimeStamp() {
 		return isTimeStamp;
@@ -66,6 +68,14 @@ public class GhonConfig {
 
 	public void setClasses(List<Class<?>> classes) {
 		this.classes = classes;
+	}
+
+	public boolean isIso8601() {
+		return isIso8601;
+	}
+
+	public void setIso8601(boolean isIso8601) {
+		this.isIso8601 = isIso8601;
 	}
 	
 	

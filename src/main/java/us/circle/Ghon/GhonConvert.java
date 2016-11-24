@@ -35,12 +35,15 @@ import us.circle.Ghon.model.GhonEleN;
 import us.circle.Ghon.model.GhonEleNumber;
 import us.circle.Ghon.model.GhonEleShort;
 import us.circle.Ghon.model.GhonEleString;
+import us.circle.Ghon.utils.DateAtUtil;
 import us.circle.Ghon.utils.DateUtil;
 import us.circle.Ghon.utils.ReflectionUtil;
 
 
 
 public class GhonConvert {
+	
+	private static final String ISO8601REGEX = "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[-+][0-9]{2}:[0-9]{2}";
 	
 	@SuppressWarnings("unchecked")
 	static GhonEle objectToGhonEle(Object obj, GhonConfig ghonConfig) throws GhonException{
@@ -70,7 +73,7 @@ public class GhonConvert {
 			ghonEleChar.setValue((Character)obj);
 			return ghonEleChar;
 		}else if(obj instanceof Date ){
-			GhonEleDate ghonEleDate = new GhonEleDate(ghonConfig.getTimeZone(), ghonConfig.getPattern(), ghonConfig.isTimeStamp());
+			GhonEleDate ghonEleDate = new GhonEleDate(ghonConfig.getTimeZone(), ghonConfig.getPattern(), ghonConfig.isTimeStamp(), ghonConfig.isIso8601());
 			ghonEleDate.setValue((Date)obj);
 			return ghonEleDate;
 		}else if(obj instanceof byte[]){
@@ -152,7 +155,7 @@ public class GhonConvert {
 			ghonEleChar.setValue((Character)obj);
 			return ghonEleChar;
 		}else if(obj instanceof Date ){
-			GhonEleDate ghonEleDate = new GhonEleDate(ghonConfig.getTimeZone(), ghonConfig.getPattern(), ghonConfig.isTimeStamp());
+			GhonEleDate ghonEleDate = new GhonEleDate(ghonConfig.getTimeZone(), ghonConfig.getPattern(), ghonConfig.isTimeStamp(), ghonConfig.isIso8601());
 			ghonEleDate.setValue((Date)obj);
 			return ghonEleDate;
 		}else if(obj instanceof byte[]){
@@ -262,6 +265,9 @@ public class GhonConvert {
 	}
 	
 	private static Object ghonEleToBaseData(GhonEleD ghonEleD, GhonConfig ghonConfig, Class<?> clazz) throws GhonException{
+		if(ghonEleD == null){
+			return null;
+		}
 		switch(ghonEleD.getBaseType()){
 			case GhonEleD.BIGDECIMAL :
 				return ((GhonEleBigdecimal)ghonEleD).getValue();
@@ -325,6 +331,12 @@ public class GhonConvert {
 			return Boolean.valueOf(s);
 		}else if(Date.class.isAssignableFrom(clazz)){
 			try {
+				if(s.matches(ISO8601REGEX)){
+					return DateAtUtil.atToDate(s, ghonConfig.getTimeZone());
+				}
+				if(ghonConfig.isTimeStamp() && s.matches("[0-9]*")){
+					return new Date(Long.valueOf(s));
+				}
 				return DateUtil.parse(s, ghonConfig.getPattern());
 			} catch (ParseException e) {
 				new GhonException(String.format("Date conversion failed. Pattern: %s, Value: %s", ghonConfig.getPattern(), s), e);
@@ -390,6 +402,10 @@ public class GhonConvert {
 		}
 		List<GhonEleB> ghonEleBs = ghonEleL.getObjects();
 		for(GhonEleB ghonEleB : ghonEleBs){
+			if(ghonEleB == null){
+				list.add(null);
+				continue;
+			}
 			if(ghonEleB.getType() == GhonEle.BASEDATA){
 				Object obj = ghonEleToBaseData((GhonEleD)ghonEleB, ghonConfig, gClazz);
 				if(obj != null){
@@ -413,6 +429,10 @@ public class GhonConvert {
 	private static void ghonEleToList(Collection<Object> list, GhonEleL ghonEleL, GhonConfig ghonConfig) throws GhonException{
 		List<GhonEleB> ghonEleBs = ghonEleL.getObjects();
 		for(GhonEleB ghonEleB : ghonEleBs){
+			if(ghonEleB == null){
+				list.add(null);
+				continue;
+			}
 			if(ghonEleB.getType() == GhonEle.BASEDATA){
 				Object obj = ghonEleToBaseData((GhonEleD)ghonEleB, ghonConfig, null);
 				if(obj != null){
@@ -449,6 +469,10 @@ public class GhonConvert {
 	private static void ghonEleToMap(Map<String, Object> map, GhonEleM ghonEleM, GhonConfig ghonConfig) throws GhonException{
 		List<GhonEleN> ghonEleNs = ghonEleM.getObjects();
 		for(GhonEleN ghonEleN : ghonEleNs){
+			if(ghonEleN.getObject() == null){
+				map.put(ghonEleN.getName(), null);
+				continue;
+			}
 			if(ghonEleN.getObject().getType() == GhonEle.BASEDATA){
 				map.put(ghonEleN.getName(), ghonEleToBaseData((GhonEleD)ghonEleN.getObject(), ghonConfig, null));
 			}else if(ghonEleN.getObject().getType() == GhonEle.BASELIST){
@@ -478,6 +502,10 @@ public class GhonConvert {
 		
 		List<GhonEleN> ghonEleNs = ghonEleM.getObjects();
 		for(GhonEleN ghonEleN : ghonEleNs){
+			if(ghonEleN.getObject() == null){
+				map.put(ghonEleN.getName(), null);
+				continue;
+			}
 			if(ghonEleN.getObject().getType() == GhonEle.BASEDATA){
 				Object obj = ghonEleToBaseData((GhonEleD)ghonEleN.getObject(), ghonConfig, gClazz);
 				if(obj != null && !isAssignableFrom(gClazz, obj.getClass())){
@@ -536,6 +564,9 @@ public class GhonConvert {
 	@SuppressWarnings("unchecked")
 	private static Object modelGhonEleToObject(GhonEleB ghonEleB, Field field, GhonConfig ghonConfig) throws GhonException{
 		Object obj = null;
+		if(ghonEleB == null){
+			return obj;
+		}
 		if(ghonEleB.getType() == GhonEle.BASEDATA){
 			obj = ghonEleToBaseData((GhonEleD)ghonEleB, ghonConfig, field.getType());
 		}else if(ghonEleB.getType() == GhonEle.BASELIST){
@@ -779,6 +810,45 @@ public class GhonConvert {
 		}else{
 			throw new GhonException(String.format("%s convert to %s error.", clazz.getSimpleName(), "Array"));
 		}
+	}
+	
+	public static <T> List<T> ghonEleToList(GhonEle ghonEle, GhonConfig ghonConfig, Class<T> clazz) throws GhonException{
+		if(ghonEle == null){
+			return null;
+		}
+		if(ghonEle.getType() != GhonEle.BASELIST){
+			throw new GhonException("GhonEle type must be list.");
+		}
+		GhonEleL ghonEleL = (GhonEleL)ghonEle;
+		List<GhonEleB> ghonEleBs = ghonEleL.getObjects();
+		if(ghonEleBs == null || ghonEleBs.isEmpty()){
+			return null;
+		}
+		List<T> list = new ArrayList<T>();
+		for(GhonEleB ghonEleB : ghonEleBs){
+			list.add(ghonEleToObject(ghonEleB, ghonConfig, clazz));
+		}
+		return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T[] ghonEleToArray(GhonEle ghonEle, GhonConfig ghonConfig, Class<T> clazz) throws GhonException{
+		if(ghonEle == null){
+			return null;
+		}
+		if(ghonEle.getType() != GhonEle.BASELIST){
+			throw new GhonException("GhonEle type must be list.");
+		}
+		GhonEleL ghonEleL = (GhonEleL)ghonEle;
+		List<GhonEleB> ghonEleBs = ghonEleL.getObjects();
+		if(ghonEleBs == null || ghonEleBs.isEmpty()){
+			return null;
+		}
+		T[] ts = (T[]) Array.newInstance(clazz, ghonEleBs.size());
+		for(int i=0;i<ghonEleBs.size();i++){
+			ts[i] = (ghonEleToObject(ghonEleBs.get(i), ghonConfig, clazz));
+		}
+		return ts;
 	}
 	
 }

@@ -25,13 +25,13 @@ public class CirclePackage{
 
     private String trackingNumber;
 
-    private String trackingContent;
-
     private String tarckingStatus;
     
     private List<String> labels;
     
     private String fileType;
+    
+    private List<TrackDetail> trackDetails;
 
 	public Float getWeight() {
         return weight;
@@ -105,14 +105,6 @@ public class CirclePackage{
         this.trackingNumber = trackingNumber == null ? null : trackingNumber.trim();
     }
 
-    public String getTrackingContent() {
-        return trackingContent;
-    }
-
-    public void setTrackingContent(String trackingContent) {
-        this.trackingContent = trackingContent == null ? null : trackingContent.trim();
-    }
-
     public String getTarckingStatus() {
         return tarckingStatus;
     }
@@ -135,6 +127,14 @@ public class CirclePackage{
 
 	public void setLabels(List<String> labels) {
 		this.labels = labels;
+	}
+
+	public List<TrackDetail> getTrackDetails() {
+		return trackDetails;
+	}
+
+	public void setTrackDetails(List<TrackDetail> trackDetails) {
+		this.trackDetails = trackDetails;
 	}
 
 }

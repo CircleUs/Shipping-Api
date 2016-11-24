@@ -28,37 +28,22 @@ import us.circle.model.type.WeightUnit;
 import us.circle.request.AddressRequest;
 import us.circle.request.ShipmentRequest;
 
-public class TestMain {
+public class TestShipment {
 	
 	public static Ghon ghon = new Ghon();
 	
-	static{
-//		Circle.basePath = "http://127.0.0.1:9000";
-		Circle.apiKey = "API_a7da5fd80ea45a7ac084648a4d0dfe23";
-//		Circle.apiKey = "TestApiKey";
-	}
-	
-
-	
 	public static void main(String[] args) {
+
 		createShipment();
-	}
-	
-	public static void retrieveAndVerify(){
-		String json = null;
-		try {
-			json = ghon.objectToGhonEle(AddressRequest.retrieveAndVerify("ec39a41039fd85e62cf7bf66cd03df9f")).toJSON(false);
-		} catch (CircleException e) {
-			json = ghon.objectToGhonEle(e.getError()).toJSON(false);
-		}
-		System.out.println(json);
+
 	}
 	
 	public static void createShipment(){
+		
 		String json = null;
 		try {
 			Shipment shipment = new Shipment();
-			Address toAddress = AddressRequest.retrieve("2934b4dbbb0c6c06ecd604e288358cdd");//26995a36fe2b91b996f6d0571f443ee8
+			Address toAddress = AddressRequest.retrieve("8754ef1cc2b95ccf8afbd8be9aa5cb6b");//26995a36fe2b91b996f6d0571f443ee8
 			shipment.setToAddress(toAddress);
 			Address fromAddress = AddressRequest.retrieve("032a498677a724c0e65c55f19fe35aaf");
 			shipment.setFromAddress(fromAddress);
@@ -74,10 +59,10 @@ public class TestMain {
 			CirclePackage circlePackage = new CirclePackage();
 			circlePackage.setWeight(10.0f);
 			circlePackage.setWeightUnit(WeightUnit.LB.name());
-			circlePackage.setSizeUnit("IN");
-			circlePackage.setHeight(20F);
-			circlePackage.setWidth(20F);
-			circlePackage.setLength(30F);
+//			circlePackage.setSizeUnit(SizeUnit.IN.name());
+//			circlePackage.setHeight(20F);
+//			circlePackage.setWidth(20F);
+//			circlePackage.setLength(30F);
 			shipment.getPackages().add(circlePackage);
 //			shipment.getPackages().add(circlePackage);
 //			CirclePackage circlePackage2 = new CirclePackage();
@@ -86,28 +71,29 @@ public class TestMain {
 //			shipment.getPackages().add(circlePackage2);
 //			shipment.getPackages().add(circlePackage2);
 			shipment.setServer(Server.FedEx.name());
-			shipment.setServerLevel(ServerLevel.FedExInternationalEconomy.name());
-			shipment.setConfirmation(Confirmation.FedExAdultsignaturerequired.name());
+			shipment.setServerLevel(ServerLevel.FedExGround.name());
+			shipment.setConfirmation(Confirmation.FedExNonespecified.name());
 			shipment.setDropOffType(DropOffType.DropBox.name());
 			shipment.setPackageType(PackageType.FedExPackage.name());
-			shipment.setReference("test");
-			CustomBase customBase = new CustomBase();
-			customBase.setEei(EEI.NOEEI30_37_a.name());
-			customBase.setPaymentType(PaymentType.SENDER.name());
-			customBase.setValueUnit("USD");
-			customBase.setWeightUnit(WeightUnit.LB.name());
-			customBase.setShipmentPurpose(ShipmentPurpose.Gift.name());
-			shipment.setCustomBase(customBase);
-			List<CustomDetail> customDetails = new ArrayList<CustomDetail>();
-			shipment.setCustomDetails(customDetails);
-			CustomDetail customDetail = new CustomDetail();
-			customDetails.add(customDetail);
-			customDetail.setIsTotal("0");
-			customDetail.setManufactureCountry("US");
-			customDetail.setName("Test");
-			customDetail.setQuantity(1);
-			customDetail.setValue(BigDecimal.ONE);
-			customDetail.setWeight(1.0f);
+//			shipment.setReference("test");
+//			CustomBase customBase = new CustomBase();
+//			customBase.setEei(EEI.NOEEI30_37_a.name());
+//			customBase.setPaymentType(PaymentType.SENDER.name());
+//			customBase.setValueUnit("USD");
+//			customBase.setWeightUnit(WeightUnit.LB.name());
+//			customBase.setShipmentPurpose(ShipmentPurpose.Gift.name());
+//			shipment.setCustomBase(customBase);
+//			List<CustomDetail> customDetails = new ArrayList<CustomDetail>();
+//			shipment.setCustomDetails(customDetails);
+//			CustomDetail customDetail = new CustomDetail();
+//			customDetails.add(customDetail);
+//			customDetail.setIsTotal("0");
+//			customDetail.setManufactureCountry("US");
+//			customDetail.setName("Test");
+//			customDetail.setQuantity(1);
+//			customDetail.setValue(BigDecimal.ONE);
+//			customDetail.setWeight(10f);
+			System.out.println(ghon.objectToGhonEle(shipment).toJSON(false));
 			json = ghon.objectToGhonEle(ShipmentRequest.create(shipment)).toJSON(false);
 		} catch (CircleException e) {
 			json = ghon.objectToGhonEle(e.getError()).toJSON(false);
@@ -118,7 +104,7 @@ public class TestMain {
 	public static void retrieveShipment(){
 		String json = null;
 		try {
-			json = ghon.objectToGhonEle(ShipmentRequest.retrieve("ship_1E7F91D0B2J91G2A")).toJSON(false);
+			json = ghon.objectToGhonEle(ShipmentRequest.retrieve("ship_14H98A66F7BF33D25A")).toJSON(false);
 		} catch (CircleException e) {
 			json = ghon.objectToGhonEle(e.getError()).toJSON(false);
 		}
@@ -129,19 +115,19 @@ public class TestMain {
 		String json = null;
 		try {
 			Shipment shipment = new Shipment();
-			shipment.setKey("ship_147G9BDA4GJ7DDGH");
+			shipment.setKey("ship_6D1IA0G65HFF0I974B");
 //			shipment.setReference("test");
-			Address toAddress = new Address();
-			toAddress.setKey("26995a36fe2b91b996f6d0571f443ee8");
-			shipment.setToAddress(toAddress);
+//			Address toAddress = new Address();
+//			toAddress.setKey("9fd5721f9161a3808e180ede988a07e0");
+//			shipment.setToAddress(toAddress);
 //			shipment.setToAddress(AddressRequest.retrieve("26995a36fe2b91b996f6d0571f443ee8"));
 //			shipment.setFromAddress(AddressRequest.retrieve("c4a4ba7b82de1ba5f5d41ac349e826ac"));
 //			shipment.setShipDate(new Date());
-			shipment.setServer(Server.UPS.name());
-			shipment.setServerLevel(ServerLevel.UPSGround.name());
-			shipment.setConfirmation(Confirmation.UPSNoConfirmation.name());
-			shipment.setPackageType(PackageType.UPSPackage.name());
-			
+//			shipment.setServer(Server.UPS.name());
+			shipment.setServerLevel(ServerLevel.FedExGroundHomeDelivery.name());
+//			shipment.setConfirmation(Confirmation.UPSNoConfirmation.name());
+//			shipment.setPackageType(PackageType.UPSPackage.name());
+			System.out.println(ghon.objectToGhonEle(shipment).toJSON(false));
 			json = ghon.objectToGhonEle(ShipmentRequest.modifyShipment(shipment)).toJSON(false);
 		} catch (CircleException e) {
 			json = ghon.objectToGhonEle(e.getError()).toJSON(false);
@@ -154,8 +140,8 @@ public class TestMain {
 		try {
 			Account account = new Account();
 			account.setPayorType(PayorType.user.name());
-			account.setPaymentType(PaymentType.SENDER.name());
-			json = ghon.objectToGhonEle(ShipmentRequest.modifyAccount(account, "ship_1E7F91D0B2J91G2A")).toJSON(false);
+			account.setPaymentType(PaymentType.RECIPIENT.name());
+			json = ghon.objectToGhonEle(ShipmentRequest.modifyAccount(account, "ship_DAG06AG2I55J7H97E1")).toJSON(false);
 		} catch (CircleException e) {
 			json = ghon.objectToGhonEle(e.getError()).toJSON(false);
 		}

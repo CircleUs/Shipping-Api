@@ -187,7 +187,7 @@ public class GhonBytes {
 		 		ghonEleD.setValue(newBytes);
 		 		return ghonEleD;
 		 	case GhonEleD.DATE : 
-		 		ghonEleD = new GhonEleDate(ghonConfig.getTimeZone(), ghonConfig.getPattern(), ghonConfig.isTimeStamp());
+		 		ghonEleD = new GhonEleDate(ghonConfig.getTimeZone(), ghonConfig.getPattern(), ghonConfig.isTimeStamp(), ghonConfig.isIso8601());
 		 		ghonEleD.setValue(newBytes);
 		 		return ghonEleD;
 		 	case GhonEleD.DOUBLE : 

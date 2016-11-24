@@ -18,13 +18,8 @@ public class TestLabel {
 	
 	private static final BASE64Decoder DECODER = new BASE64Decoder();
 	
-	static{
-//		Circle.basePath = "http://127.0.0.1:9000";
-		Circle.apiKey = "API_a7da5fd80ea45a7ac084648a4d0dfe23";
-//		Circle.apiKey = "TestApiKey";
-	}
-	
 	public static void main(String[] args) {
+		GHON.setShowNull(false);
 		createLabel();
 	}
 	
@@ -37,7 +32,8 @@ public class TestLabel {
 	
 	public static void createLabel(){
 		try {
-			Shipment shipment = LabelRequest.create("ship_C4GC106C8F583FH7E1", true);
+			Shipment shipment = LabelRequest.create("ship_6D1IA0G65HFF0I974B", true);
+			System.out.println(GHON.objectToGhonEle(shipment).toJSON(false));
 			for(CirclePackage circlePackage : shipment.getPackages()){
 				if(circlePackage.getLabels() != null){
 					for(int i = 0;i < circlePackage.getLabels().size();i++){

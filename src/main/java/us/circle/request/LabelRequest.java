@@ -27,4 +27,10 @@ public class LabelRequest extends BaseRequest {
 		params.put("shipKey", shipKey);
 		return call("LabelServer/downloadLabel", "GET", params, Shipment.class);
 	}
+	
+	public static Shipment tracking(String shipKey) throws CircleException{
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("shipKey", shipKey);
+		return call("LabelServer/tracking", "GET", params, Shipment.class);
+	}
 }

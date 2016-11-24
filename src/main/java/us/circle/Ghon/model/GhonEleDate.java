@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import us.circle.Ghon.GhonException;
+import us.circle.Ghon.utils.DateAtUtil;
 import us.circle.Ghon.utils.DateUtil;
 
 
@@ -15,11 +16,14 @@ public class GhonEleDate extends GhonEleD {
 	private String pattern;
 	
 	private boolean isTimeStamp;
+	
+	private boolean isIso8601;
 
-	public GhonEleDate(TimeZone timeZone, String pattern, boolean isTimeStamp){
+	public GhonEleDate(TimeZone timeZone, String pattern, boolean isTimeStamp, boolean isIso8601){
 		this.timeZone = timeZone;
 		this.pattern = pattern;
 		this.isTimeStamp = isTimeStamp;
+		this.isIso8601 = isIso8601;
 	}
 
 	@Override
@@ -96,6 +100,9 @@ public class GhonEleDate extends GhonEleD {
 		}
 		if(isGhon){
 			return String.format("%s%s", value, (char)getBaseType());
+		}
+		if(isIso8601){
+			return String.format("\"%s\"", DateAtUtil.dateToAt(new Date(value), timeZone));
 		}
 		if(isTimeStamp){
 			return String.format("\"%s\"", value);

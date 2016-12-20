@@ -1,11 +1,13 @@
 package us.circle.request;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import us.circle.base.BaseRequest;
 import us.circle.base.CircleException;
 import us.circle.model.Shipment;
+import us.circle.model.TrackInfo;
 
 public class LabelRequest extends BaseRequest {
 	
@@ -32,5 +34,9 @@ public class LabelRequest extends BaseRequest {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("shipKey", shipKey);
 		return call("LabelServer/tracking", "GET", params, Shipment.class);
+	}
+	
+	public static List<TrackInfo> trackingNumber(String trackingNumber) throws CircleException{
+		return callList(String.format("LabelServer/trackingNumber/%s", trackingNumber), "GET", null, TrackInfo.class);
 	}
 }

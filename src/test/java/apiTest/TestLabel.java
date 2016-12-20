@@ -20,7 +20,9 @@ public class TestLabel {
 	
 	public static void main(String[] args) {
 		GHON.setShowNull(false);
-		createLabel();
+		Circle.apiKey="TestApiKey";
+		Circle.basePath="http://127.0.0.1:9000";
+		trackingNumber();
 	}
 	
 	private static void writeFile(File file, byte[] bytes) throws Exception{
@@ -91,6 +93,16 @@ public class TestLabel {
 					writeFile(file, DECODER.decodeBuffer(invoice));
 				}
 			}
+		} catch (CircleException e) {
+			System.out.println(GHON.objectToGhonEle(e.getError()).toJSON(false));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void trackingNumber(){
+		try {
+			System.out.println(GHON.objectToGhonEle(LabelRequest.trackingNumber("9405510200986487684284")).toJSON(false));
 		} catch (CircleException e) {
 			System.out.println(GHON.objectToGhonEle(e.getError()).toJSON(false));
 		} catch (Exception e) {

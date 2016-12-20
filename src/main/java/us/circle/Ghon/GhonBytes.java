@@ -57,6 +57,13 @@ public class GhonBytes {
 			return bytesToGhonEle(bytes, ghonConfig);
 		}else if(bytes[0] == GhonJson.LDKH || bytes[0] == GhonJson.LFKH){
 			return GhonJson.jsonToGhonEle(new String(bytes), ghonConfig);
+		}else{
+			String json = new String(bytes);
+			json = json.trim();
+			bytes = json.getBytes();
+			if(bytes[0] == GhonJson.LDKH || bytes[0] == GhonJson.LFKH){
+				return GhonJson.jsonToGhonEle(new String(bytes), ghonConfig);
+			}
 		}
 		throw new GhonException("This data type is not JSON or GHON.");
 	}

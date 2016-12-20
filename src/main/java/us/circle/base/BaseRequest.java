@@ -1,6 +1,7 @@
 package us.circle.base;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import us.circle.Ghon.Ghon;
@@ -61,6 +62,30 @@ public class BaseRequest {
 					headers, CONNECTTIMEOUT, getReadTimeout(), false);
 			GhonEle ghonEle = GHON.bytesOrJsonToGhonEle(bytes);
 			return GHON.ghonEleToObject(ghonEle, clazz);
+		} catch (GhonException e) {
+			throw createCircleException("Data format error.", e);
+		} catch (GhonHttpException e) {
+			throw ghonExceptionHandler(e);
+		}
+	}
+	
+	public static <T> List<T> callList(String path, String method, Map<String, String> params, Class<T> clazz) throws CircleException{
+		if(Circle.apiKey == null || Circle.apiKey.trim().isEmpty()){
+			throw createCircleException("ApiKey is required.", null);
+		}
+		if(Circle.VERSION == null || Circle.VERSION.trim().isEmpty()){
+			throw createCircleException("Version is required.", null);
+		}
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Authorization", Circle.apiKey);
+		headers.put("CircleApiVersion", Circle.VERSION);
+		headers.put("Language", "JAVA");
+		headers.put("ReadTimeOut", String.valueOf(getReadTimeout()));
+		try {
+			byte[] bytes = GHON_HTTP.call(String.format("%s/%s", Circle.basePath, path), method, params, 
+					headers, CONNECTTIMEOUT, getReadTimeout(), false);
+			GhonEle ghonEle = GHON.bytesOrJsonToGhonEle(bytes);
+			return GHON.ghonEleToList(ghonEle, clazz);
 		} catch (GhonException e) {
 			throw createCircleException("Data format error.", e);
 		} catch (GhonHttpException e) {

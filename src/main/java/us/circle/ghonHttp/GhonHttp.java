@@ -53,12 +53,16 @@ public class GhonHttp {
 		StringBuilder sb = new StringBuilder();
 		if(params != null && !params.isEmpty()){
 			for(Entry<String, String> param : params.entrySet()){
-				sb.append(urlEncoder(param.getKey()));
-				sb.append('=');
-				sb.append(urlEncoder(param.getValue()));
-				sb.append('&');
+				String key = param.getKey();
+				String value = param.getValue();
+				if(key != null && !key.trim().isEmpty() && value != null){
+					if(sb.length() == 0){
+						sb.append(String.format("%s=%s", urlEncoder(key), urlEncoder(value)));
+					}else{
+						sb.append(String.format("&%s=%s", urlEncoder(key), urlEncoder(value)));
+					}
+				}
 			}
-			sb = new StringBuilder(sb.substring(0, sb.length()-1));
 		}
 		if("GET".equals(method.toUpperCase()) || "DELETE".equals(method.toUpperCase())){
 			String newUrl = urlPath;
@@ -75,10 +79,14 @@ public class GhonHttp {
 		StringBuilder sb = new StringBuilder();
 		if(params != null && !params.isEmpty()){
 			for(Entry<String, String> param : params.entrySet()){
-				sb.append(urlEncoder(param.getKey()));
-				sb.append('=');
-				sb.append(urlEncoder(param.getValue()));
-				sb.append('&');
+				if(param.getValue() != null){
+					if(param.getValue() != null){
+						sb.append(urlEncoder(param.getKey()));
+						sb.append('=');
+						sb.append(urlEncoder(param.getValue()));
+						sb.append('&');
+					}
+				}
 			}
 			sb = new StringBuilder(sb.substring(0, sb.length()-1));
 		}

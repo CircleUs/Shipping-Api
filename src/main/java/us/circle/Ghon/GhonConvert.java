@@ -821,12 +821,11 @@ public class GhonConvert {
 		}
 		GhonEleL ghonEleL = (GhonEleL)ghonEle;
 		List<GhonEleB> ghonEleBs = ghonEleL.getObjects();
-		if(ghonEleBs == null || ghonEleBs.isEmpty()){
-			return null;
-		}
 		List<T> list = new ArrayList<T>();
-		for(GhonEleB ghonEleB : ghonEleBs){
-			list.add(ghonEleToObject(ghonEleB, ghonConfig, clazz));
+		if(ghonEleBs != null && !ghonEleBs.isEmpty()){
+			for(GhonEleB ghonEleB : ghonEleBs){
+				list.add(ghonEleToObject(ghonEleB, ghonConfig, clazz));
+			}
 		}
 		return list;
 	}

@@ -170,12 +170,16 @@ public class GhonJson {
 				GhonEleL ghonEleL = jsonToGhonEleL(Arrays.copyOfRange(vChars, 1, vChars.length - 1), ghonConfig);
 				if(ghonEleL != null){
 					ghonEleN.setObject(ghonEleL);
+				}else{
+					ghonEleN.setObject(new GhonEleL());
 				}
 				break;
 			case LDKH :
 				GhonEleM ghonEleM = jsonToGhonEleM(Arrays.copyOfRange(vChars, 1, vChars.length - 1), ghonConfig);
 				if(ghonEleM != null){
 					ghonEleN.setObject(ghonEleM);
+				}else{
+					ghonEleN.setObject(new GhonEleM());
 				}
 				break;
 			default :

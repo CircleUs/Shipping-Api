@@ -42,8 +42,11 @@ public class Shipment {
     private List<CustomDetail> customDetails;
     
     private Rate rate;
+    
+    private String labelSize;
 
-
+    private String labelFileType;
+    
 	public String getKey() {
 		return key;
 	}
@@ -192,5 +195,21 @@ public class Shipment {
 
 	public void setRate(Rate rate) {
 		this.rate = rate;
+	}
+
+	public String getLabelSize() {
+		return labelSize;
+	}
+
+	public void setLabelSize(String labelSize) {
+		this.labelSize = labelSize;
+	}
+
+	public String getLabelFileType() {
+		return labelFileType;
+	}
+
+	public void setLabelFileType(String labelFileType) {
+		this.labelFileType = labelFileType;
 	}
 }

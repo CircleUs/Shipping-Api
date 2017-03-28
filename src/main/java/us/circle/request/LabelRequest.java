@@ -24,9 +24,12 @@ public class LabelRequest extends BaseRequest {
 		return Boolean.valueOf(call("LabelServer/cancel", "GET", params));
 	}
 	
-	public static Shipment downloadLabel(String shipKey) throws CircleException{
+	public static Shipment downloadLabel(String shipKey, Boolean isCrop) throws CircleException{
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("shipKey", shipKey);
+		if(isCrop != null){
+			params.put("isCrop", isCrop.toString());
+		}
 		return call("LabelServer/downloadLabel", "GET", params, Shipment.class);
 	}
 	
